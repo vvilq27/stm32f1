@@ -62,18 +62,18 @@ void TIM2_IRQHandler(void){
     if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET){
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 
-		frameCnt[0] = 0;
-		frameCnt[1] = 0;
-		diff = cnt - prevCnt;
-		ST7735_PutStr5x7(10, 20,itoa(diff,frameCnt, 10), RGB565(128, 128, 128));
-		ST7735_PutStr5x7(10, 30,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
-		ST7735_PutStr5x7(10, 40,itoa(prevCnt,cnt_s, 10), RGB565(128, 128, 128));
-		prevCnt = cnt;
+//		diff = cnt - prevCnt;
+//        ST7735_Clear(0x0000);
+        ST7735_PutStr5x7(10, 40,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
+//		ST7735_PutStr5x7(10, 20,itoa(diff,frameCnt, 10), RGB565(128, 128, 128));
+//		ST7735_PutStr5x7(10, 30,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
+//		ST7735_PutStr5x7(10, 40,itoa(prevCnt,cnt_s, 10), RGB565(128, 128, 128));
+//		prevCnt = cnt;
 
 		if (GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_13))
-		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+			GPIO_ResetBits(GPIOC, GPIO_Pin_13);
 		else
-		GPIO_SetBits(GPIOC, GPIO_Pin_13);
+			GPIO_SetBits(GPIOC, GPIO_Pin_13);
     }
 }
 

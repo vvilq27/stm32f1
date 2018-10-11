@@ -42,11 +42,13 @@ void InitializeBlinker()
 //    GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_SET);
 }
 
-	volatile uint32_t cnt = 0;
-	volatile char cnt_s[5];
+	volatile uint16_t cnt = 0;
+	volatile char cnt_s[6];
+	uint8_t pic_done = 0;
 
 int main(void)
 {
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
 	ST7735_Init();
 	ST7735_AddrSet(0,0,159,127);
 	ST7735_Clear(0x0000);
@@ -57,19 +59,36 @@ int main(void)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 	stmForCameraSetup();
 	TIM2_setup();
-	EnableTimerInterrupt();
-
+//	EnableTimerInterrupt();
+	uint8_t i = 0;
 
 	while(1) {
-		while((GPIOB->IDR & GPIO_Pin_10)){
-			ST7735_PutStr5x7(10, 10,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
-		}
+
+		while(!(GPIOA->IDR & GPIO_Pin_6)){
+			while((GPIOB->IDR & GPIO_Pin_10)){
+			}
+
 			cnt++;
 
-		while(!(GPIOB->IDR & GPIO_Pin_10)){
-
+			while(!(GPIOB->IDR & GPIO_Pin_10)){
+			}
 		}
 
-//		ST7735_PutStr5x7(10, 60,itoa(TIM_GetCounter(TIM2),cnt_s, 10), RGB565(128, 128, 128));
+		i += 10;
+
+		//info
+		//part below not working, dunno, run it somehow
+		while((GPIOA->IDR & GPIO_Pin_6)){
+//			if(cnt>10){
+//				ST7735_PutStr5x7(10, i,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
+				ST7735_PutStr5x7(10, 40,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
+				cnt = 0;
+//			}
+		}
+
 	}//end main loop
+
 }//end main
+
+//======NOTES=========
+//		ST7735_PutStr5x7(10, 60,itoa(TIM_GetCounter(TIM2),cnt_s, 10), RGB565(128, 128, 128));
