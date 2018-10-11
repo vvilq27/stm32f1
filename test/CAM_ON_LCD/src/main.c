@@ -64,6 +64,7 @@ int main(void)
 
 	while(1) {
 
+		GPIO_SetBits(GPIOC, GPIO_Pin_13);
 		while(!(GPIOA->IDR & GPIO_Pin_6)){
 			while((GPIOB->IDR & GPIO_Pin_10)){
 			}
@@ -71,24 +72,20 @@ int main(void)
 			cnt++;
 
 			while(!(GPIOB->IDR & GPIO_Pin_10)){
+				//without it, it wont let go out of "parent" while
+				if((GPIOA->IDR & GPIO_Pin_6))
+					break;
 			}
 		}
 
-		i += 10;
+		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
 
-		//info
-		//part below not working, dunno, run it somehow
 		while((GPIOA->IDR & GPIO_Pin_6)){
-//			if(cnt>10){
-//				ST7735_PutStr5x7(10, i,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
-				ST7735_PutStr5x7(10, 40,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
-				cnt = 0;
-//			}
+			ST7735_PutStr5x7(10, 40,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
 		}
-
+		cnt = 0;
 	}//end main loop
 
 }//end main
-
 //======NOTES=========
 //		ST7735_PutStr5x7(10, 60,itoa(TIM_GetCounter(TIM2),cnt_s, 10), RGB565(128, 128, 128));
