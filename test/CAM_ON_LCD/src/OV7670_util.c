@@ -58,6 +58,10 @@ void twoWireStop() {
     twoWireDelay();
 }
 
+//bit changes on falling CLK
+//bit is read on rising edge
+//MSB goes 1st
+//high bit after sent 8 data bits is camera response
 int twoWireWriteByte(unsigned char b) {
     int i;
     for (i = 0; i < 8; i++) {
@@ -100,6 +104,7 @@ unsigned char twoWireReadByte() {
     return b;
 }
 
+//14 CLK, 15 DATA
 void twoWireInit() {
     pinMode(GPIOC_BASE, 14, PIN_MODE_OUT_SLOW, PIN_CNF_O_PP);
     pinOutput(GPIOC_BASE, 14, 1);

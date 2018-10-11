@@ -61,6 +61,7 @@ int main(void)
 	twoWireInit();
 
 	stmForCameraSetup();
+	camInit();
 	setRes(QQVGA);
 	setColorSpace(YUV422);
 

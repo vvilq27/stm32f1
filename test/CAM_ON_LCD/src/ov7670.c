@@ -199,8 +199,8 @@ void setColorSpace(enum COLORSPACE color){
 void wrSensorRegs8_8(const struct regval_list reglist[]){
 	const struct regval_list *next = reglist;
 	for(;;){
-		uint8_t reg_addr = &next->reg_num;
-		uint8_t reg_val = &next->value;
+		uint8_t reg_addr = next->reg_num;
+		uint8_t reg_val = next->value;
 		if((reg_addr==255)&&(reg_val==255))
 			break;
 		cameraWriteByte(reg_addr, reg_val);
@@ -226,7 +226,7 @@ void setRes(enum RESOLUTION res){
 }
 void camInit(void){
 	cameraWriteByte(0x12, 0x80);//Reset the camera.
-	_delay_ms(100);
+	Delay_ms(100);
 	wrSensorRegs8_8(ov7670_default_regs);
 	cameraWriteByte(REG_COM10,32);//PCLK does not toggle on HBLANK.
 }
