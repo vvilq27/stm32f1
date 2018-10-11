@@ -4,6 +4,7 @@
 
 #include "../inc/delay.h"
 #include "../inc/st7735.h"
+#include "ov7670.h"
 
 
 /*
@@ -57,7 +58,12 @@ int main(void)
 	InitializeBlinker();
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+	twoWireInit();
+
 	stmForCameraSetup();
+	setRes(QQVGA);
+	setColorSpace(YUV422);
+
 	TIM2_setup();
 //	EnableTimerInterrupt();
 	uint8_t i = 0;
