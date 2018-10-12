@@ -43,7 +43,8 @@ void InitializeBlinker()
 //    GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_SET);
 }
 
-	volatile uint16_t cnt = 0;
+	volatile uint16_t fcnt = 0;
+	volatile uint16_t pcnt = 0;
 	volatile char cnt_s[6];
 	uint8_t pic_done = 0;
 
@@ -72,25 +73,40 @@ int main(void)
 	while(1) {
 
 		GPIO_SetBits(GPIOC, GPIO_Pin_13);
-		while(!(GPIOA->IDR & GPIO_Pin_6)){
+
+		//picture going
+		while(!(GPIOB->IDR & GPIO_Pin_11)){
+			//row going
 			while((GPIOB->IDR & GPIO_Pin_10)){
+				//pix going
+				while(!(GPIOB->IDR & GPIO_Pin_1)){
+				}
+				pcnt++;
+				while((GPIOB->IDR & GPIO_Pin_1)){
+					if((GPIOB->IDR & GPIO_Pin_10))
+						break;
+				}
 			}
 
-			cnt++;
+			fcnt++;
+//			ST7735_Pixel(i++, fcnt, RGB565(128,132,128));
 
 			while(!(GPIOB->IDR & GPIO_Pin_10)){
 				//without it, it wont let go out of "parent" while
-				if((GPIOA->IDR & GPIO_Pin_6))
+				if((GPIOB->IDR & GPIO_Pin_11))
 					break;
 			}
 		}
 
 		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+		ST7735_PutStr5x7(10, 20,itoa(fcnt,cnt_s, 10), RGB565(128, 128, 128));
+		ST7735_PutStr5x7(10, 40,itoa(pcnt,cnt_s, 10), RGB565(128, 128, 128));
 
-		while((GPIOA->IDR & GPIO_Pin_6)){
-			ST7735_PutStr5x7(10, 40,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
+		while((GPIOB->IDR & GPIO_Pin_11)){
 		}
-		cnt = 0;
+		fcnt = 0;
+		pcnt = 0;
+
 	}//end main loop
 
 }//end main

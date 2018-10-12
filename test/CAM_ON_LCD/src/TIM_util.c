@@ -64,7 +64,7 @@ void TIM2_IRQHandler(void){
 
 //		diff = cnt - prevCnt;
 //        ST7735_Clear(0x0000);
-        ST7735_PutStr5x7(10, 40,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
+//        ST7735_PutStr5x7(10, 40,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
 //		ST7735_PutStr5x7(10, 20,itoa(diff,frameCnt, 10), RGB565(128, 128, 128));
 //		ST7735_PutStr5x7(10, 30,itoa(cnt,cnt_s, 10), RGB565(128, 128, 128));
 //		ST7735_PutStr5x7(10, 40,itoa(prevCnt,cnt_s, 10), RGB565(128, 128, 128));
