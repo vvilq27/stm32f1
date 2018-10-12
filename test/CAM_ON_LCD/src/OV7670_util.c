@@ -145,8 +145,8 @@ void stmForCameraSetup(void){
 	 //tim freq setup
 	 TIM_TimeBaseStructInit(&tim);
 	 tim.TIM_CounterMode = TIM_CounterMode_Up;
-	 tim.TIM_Prescaler = 16;		//1 for 8 mhz
-	 tim.TIM_Period = 2 - 1;
+	 tim.TIM_Prescaler = 32;		//1 for 8 mhz
+	 tim.TIM_Period = 16 - 1;
 	 TIM_TimeBaseInit(TIM4, &tim);
 
 

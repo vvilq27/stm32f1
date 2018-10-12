@@ -46,7 +46,7 @@ void InitializeBlinker()
 	volatile uint16_t fcnt = 0;
 	volatile uint16_t pcnt = 0;
 	volatile char cnt_s[6];
-	uint8_t pic_done = 0;
+	uint8_t row[160];
 
 int main(void)
 {
@@ -69,28 +69,50 @@ int main(void)
 	TIM2_setup();
 //	EnableTimerInterrupt();
 	uint8_t i = 0;
+	uint8_t j = 0;
 
 	while(1) {
+
+		//doesnt work, make array and write it after scan
+		//put scan value on screen
+
+		//initialize port as input with pullup
+		//why spi its not sending every row?
+
 
 		GPIO_SetBits(GPIOC, GPIO_Pin_13);
 
 		//picture going
 		while(!(GPIOB->IDR & GPIO_Pin_11)){
-			//row going
+			//high - row going
 			while((GPIOB->IDR & GPIO_Pin_10)){
 				//pix going
+				i++;
+				//low
 				while(!(GPIOB->IDR & GPIO_Pin_1)){
 				}
-				pcnt++;
+				row[i] = (GPIOA->IDR & 0xff);
+
+				//high
 				while((GPIOB->IDR & GPIO_Pin_1)){
+				}
+
+				//low
+				while(!(GPIOB->IDR & GPIO_Pin_1)){
+				}
+				//high
+				while(!(GPIOB->IDR & GPIO_Pin_1)){
 					if((GPIOB->IDR & GPIO_Pin_10))
 						break;
 				}
+
 			}
+			i=0;
+			ST7735_PutStr5x7(10, 40,itoa(row[80],cnt_s, 10), RGB565(128, 128, 128));
+			ST7735_PutStr5x7(10, 50,itoa(row[81],cnt_s, 10), RGB565(128, 128, 128));
+			ST7735_PutStr5x7(10, 60,itoa(row[82],cnt_s, 10), RGB565(128, 128, 128));
 
-			fcnt++;
-//			ST7735_Pixel(i++, fcnt, RGB565(128,132,128));
-
+			//low, wait for new row
 			while(!(GPIOB->IDR & GPIO_Pin_10)){
 				//without it, it wont let go out of "parent" while
 				if((GPIOB->IDR & GPIO_Pin_11))
@@ -99,16 +121,25 @@ int main(void)
 		}
 
 		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-		ST7735_PutStr5x7(10, 20,itoa(fcnt,cnt_s, 10), RGB565(128, 128, 128));
-		ST7735_PutStr5x7(10, 40,itoa(pcnt,cnt_s, 10), RGB565(128, 128, 128));
 
+		//next pic indicator
 		while((GPIOB->IDR & GPIO_Pin_11)){
 		}
-		fcnt = 0;
-		pcnt = 0;
 
 	}//end main loop
 
 }//end main
 //======NOTES=========
 //		ST7735_PutStr5x7(10, 60,itoa(TIM_GetCounter(TIM2),cnt_s, 10), RGB565(128, 128, 128));
+
+//		ST7735_PutStr5x7(10, 20,itoa(fcnt,cnt_s, 10), RGB565(128, 128, 128));
+//		ST7735_PutStr5x7(10, 40,itoa(pcnt,cnt_s, 10), RGB565(128, 128, 128));
+
+//				ST7735_Pixel(j, i, RGB565(pixVal,pixVal,pixVal));
+
+//for(int x = 0; x < 160; x++){
+//	uint8_t pixVal = row[x];
+//	ST7735_Pixel(5, x, RGB565(pixVal,pixVal,pixVal));
+//}
+
+
