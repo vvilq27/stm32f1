@@ -21,7 +21,7 @@ void TIM2_setup(void){
 
 	TIM_Cmd(TIM2, ENABLE);
 
-	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+//	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
 }
 
 void TIM4_PWM(void){
