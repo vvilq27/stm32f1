@@ -146,14 +146,14 @@ void stmForCameraSetup(void){
 	 TIM_TimeBaseStructInit(&tim);
 	 tim.TIM_CounterMode = TIM_CounterMode_Up;
 	 tim.TIM_Prescaler = 16-1;		//1 for 8 mhz
-	 tim.TIM_Period = 4 - 1;
+	 tim.TIM_Period = 8 - 1;
 	 TIM_TimeBaseInit(TIM4, &tim);
 
 
 	 TIM_OCStructInit(&channel);
 	  channel.TIM_OCMode = TIM_OCMode_PWM1;
 	  channel.TIM_OutputState = TIM_OutputState_Enable;
-	  channel.TIM_Pulse = 1;
+	  channel.TIM_Pulse = 4;
 	  TIM_OC1Init(TIM4, &channel);
 
 	  TIM_Cmd(TIM4, ENABLE);

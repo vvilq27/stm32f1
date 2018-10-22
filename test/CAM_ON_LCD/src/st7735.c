@@ -385,6 +385,51 @@ void ST7735_PutChar5x7(uint16_t X, uint16_t Y, uint8_t chr, uint16_t color) {
 	CS_H();
 }
 
+void ST7735_PutNumber5x7(uint16_t X, uint16_t Y, uint8_t n, uint16_t color) {
+	uint16_t i,j,k;
+	uint8_t buffer[5];
+    uint8_t CH = color >> 8;
+    uint8_t CL = (uint8_t)color;
+
+    static char s[10];
+    int z, x1;
+    k = 0;
+
+    //create char array from given n number: 234 -> s[]={4,3,2} numbers are inverted!
+    while (n > 0) {
+        x1 = n / 10;
+        s[k++] = n - x1 * 10;
+        n = x1;
+    }
+    if (k == 0) {
+        s[k++] = 0;
+    }
+    //var to space numbers in s array
+    uint8_t spacer = k;
+    //write out numbers to screen
+    while (k > 0) {
+		memcpy(buffer,&Font5x7[(16+s[--k]) * 5],5);
+
+		CS_L();
+		//set place for each number
+		//1 + (spacer-k)*5 to offset following numbers
+		ST7735_AddrSet(X + 1 + (spacer-k)*5,Y ,X + 4 + 1 + (spacer-k)*5,Y + 6 );
+		A0_H();
+		for (j = 0; j < 7; j++) {
+			for (i = 0; i < 5; i++) {
+				if ((buffer[i] >> j) & 0x01) {
+					ST7735_write(CH);
+					ST7735_write(CL);
+				} else {
+					ST7735_write(0x00);
+					ST7735_write(0x00);
+				}
+			}
+		}
+		CS_H();
+    }
+}
+
 void ST7735_PutStr5x7(uint8_t X, uint8_t Y, char *str, uint16_t color) {
     while (*str) {
         ST7735_PutChar5x7(X,Y,*str++,color);
